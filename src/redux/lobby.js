@@ -5,13 +5,7 @@ export const initialState = {
     currentRound: 0,
     currentQuestion: 0,
     audienceSize: 0,
-    players: [
-      {
-        name: "",
-        vip: true,
-        totalScore: 0,
-      },
-    ],
+    players: [],
     rounds: [
       {
         id: 1,
@@ -54,16 +48,18 @@ export default function reducer(state = initialState, action) {
       // adds a new player to the players list
       return {
         ...state,
-        players.push({"name": action.name,
-                  "vip": false,
-                  "totalScore": 0
-          })
+        players: [...state.players,
+                  {"name": action.name,
+                   "vip": false,
+                   "totalScore": 0
+                   }
+                 ]
        };
     case 'START_TUTORIAL':
           // flips the initialized state for the game payload
           return {
             ...state,
-            currentGame.currentRound: "Tutorial",
+            ...state.currentGame.currentRound: "Tutorial",
            };
     default:
       return state;
