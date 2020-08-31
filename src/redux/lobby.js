@@ -54,10 +54,10 @@ export default function reducer(state = initialState, action) {
       // adds a new player to the players list
       return {
         ...state,
-        players: {"name": action.name,
+        players.push({"name": action.name,
                   "vip": false,
                   "totalScore": 0
-          }
+          })
        };
     case 'START_TUTORIAL':
           // flips the initialized state for the game payload
