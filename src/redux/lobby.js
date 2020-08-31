@@ -45,12 +45,26 @@ export const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case 'INIT_GAME':
-      // Changes the requesting field in state to true to show we are currently fetching to-dos
-      return Object.assign({}, state,
-        {
-          initialized: true,
-        },
-      );
+      // flips the initialized state for the game payload
+      return {
+        ...state,
+        initialized: !state.initialized,
+       };
+    case 'ADD_PLAYER':
+      // adds a new player to the players list
+      return {
+        ...state,
+        players: {"name": action.name,
+                  "vip": false,
+                  "totalScore": 0
+          }
+       };
+    case 'START_TUTORIAL':
+          // flips the initialized state for the game payload
+          return {
+            ...state,
+            currentGame.currentRound: "Tutorial",
+           };
     default:
       return state;
   }
