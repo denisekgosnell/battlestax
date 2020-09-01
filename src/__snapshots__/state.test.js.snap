@@ -1,0 +1,167 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`start a new game reducer should handle ADD_PLAYER request 1`] = `
+Object {
+  "currentGame": Object {
+    "audienceSize": 0,
+    "currentQuestion": 0,
+    "currentRound": 0,
+    "players": Array [
+      Object {
+        "name": undefined,
+        "totalScore": 0,
+        "vip": true,
+      },
+    ],
+    "rounds": Array [
+      Object {
+        "id": 1,
+        "questions": Array [
+          Object {
+            "answers": Array [
+              Object {
+                "answer": "",
+                "audienceVotes": 0,
+                "name": "",
+                "score": 0,
+                "votes": Array [
+                  Object {
+                    "name": "",
+                  },
+                ],
+              },
+            ],
+            "content": "",
+            "type": "",
+          },
+        ],
+        "scoreMultiplier": 1,
+        "title": "Round One",
+        "type": "",
+      },
+    ],
+  },
+  "gameId": 0,
+  "initialized": false,
+}
+`;
+
+exports[`start a new game reducer should handle ADD_PLAYER request 2`] = `
+Object {
+  "currentGame": Object {
+    "audienceSize": 0,
+    "currentQuestion": 0,
+    "currentRound": "TUTORIAL_ROUND",
+    "players": Array [],
+    "rounds": Array [
+      Object {
+        "id": 1,
+        "questions": Array [
+          Object {
+            "answers": Array [
+              Object {
+                "answer": "",
+                "audienceVotes": 0,
+                "name": "",
+                "score": 0,
+                "votes": Array [
+                  Object {
+                    "name": "",
+                  },
+                ],
+              },
+            ],
+            "content": "",
+            "type": "",
+          },
+        ],
+        "scoreMultiplier": 1,
+        "title": "Round One",
+        "type": "",
+      },
+    ],
+  },
+  "gameId": 0,
+  "initialized": false,
+}
+`;
+
+exports[`start a new game reducer should handle INIT_GAME request 1`] = `
+Object {
+  "currentGame": Object {
+    "audienceSize": 0,
+    "currentQuestion": 0,
+    "currentRound": 0,
+    "players": Array [],
+    "rounds": Array [
+      Object {
+        "id": 1,
+        "questions": Array [
+          Object {
+            "answers": Array [
+              Object {
+                "answer": "",
+                "audienceVotes": 0,
+                "name": "",
+                "score": 0,
+                "votes": Array [
+                  Object {
+                    "name": "",
+                  },
+                ],
+              },
+            ],
+            "content": "",
+            "type": "",
+          },
+        ],
+        "scoreMultiplier": 1,
+        "title": "Round One",
+        "type": "",
+      },
+    ],
+  },
+  "gameId": 0,
+  "initialized": true,
+}
+`;
+
+exports[`start a new game reducer should return the initial state 1`] = `
+Object {
+  "currentGame": Object {
+    "audienceSize": 0,
+    "currentQuestion": 0,
+    "currentRound": 0,
+    "players": Array [],
+    "rounds": Array [
+      Object {
+        "id": 1,
+        "questions": Array [
+          Object {
+            "answers": Array [
+              Object {
+                "answer": "",
+                "audienceVotes": 0,
+                "name": "",
+                "score": 0,
+                "votes": Array [
+                  Object {
+                    "name": "",
+                  },
+                ],
+              },
+            ],
+            "content": "",
+            "type": "",
+          },
+        ],
+        "scoreMultiplier": 1,
+        "title": "Round One",
+        "type": "",
+      },
+    ],
+  },
+  "gameId": 0,
+  "initialized": false,
+}
+`;
