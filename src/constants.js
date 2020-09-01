@@ -3,7 +3,8 @@ export default {
   MINIMUM_PLAYERS: 3,
   MAXIMUM_PLAYERS: 8,
 
-  // lobby rounds
+  // lobby states
+  ADDING_PLAYERS: "ADDING_PLAYERS",
   TUTORIAL_ROUND: "TUTORIAL_ROUND",
 
   // reducers
