@@ -4,6 +4,7 @@ const initialState = {
   initialized: false,
   gameId: 0,
   currentGame: {
+    currentState: "",
     currentRound: 0,
     currentQuestion: 0,
     audienceSize: 0,
@@ -40,11 +41,19 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case constants.INIT_GAME:
-      // flips the initialized state for the game payload
+    case constants.APP_INITIALIZED:
+      // flips the initialized state for the app
       return {
         ...state,
         initialized: !state.initialized,
+      };
+    case constants.INIT_GAME:
+      // start a new game
+      return {
+        ...state,
+        currentGame: {
+          currentState: constants.ADDING_PLAYERS,
+        },
       };
     case constants.ADD_PLAYER:
       // adds a new player to the players list
