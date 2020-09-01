@@ -47,17 +47,21 @@ export default function reducer(state = initialState, action) {
         ...state,
         initialized: !state.initialized,
       };
+      
     case constants.INIT_GAME:
       // start a new game
+      // game's current state should be "ADDING PLAYERS"
       return {
         ...state,
         currentGame: {
           currentState: constants.ADDING_PLAYERS,
         },
       };
+
     case constants.ADD_PLAYER:
       // adds a new player to the players list
       if (state.currentGame.players.length === constants.MAXIMUM_PLAYERS)
+        // TODO: ADDING THE PLAYER WHO TRIGGERS THIS LOGIC TO THE AUDIENCE
         return { ...state, audienceSize: state.audienceSize++ };
       return {
         ...state,
@@ -75,11 +79,23 @@ export default function reducer(state = initialState, action) {
       };
     case constants.START_TUTORIAL:
       // flips the initialized state for the game payload
+      // game's current state should be "TUTORIAL ROUND"
       return {
         ...state,
         currentGame: {
           ...state.currentGame,
           currentRound: constants.TUTORIAL_ROUND,
+        },
+      };
+      
+    case constants.ROUND_ONE:
+      // flips the initialized state for the game payload
+      // game's current state should be "TUTORIAL ROUND"
+      return {
+        ...state,
+        currentGame: {
+          ...state.currentGame,
+          currentRound: constants.ROUND_ONE,
         },
       };
     default:
