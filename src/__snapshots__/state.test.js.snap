@@ -6,6 +6,7 @@ Object {
     "audienceSize": 0,
     "currentQuestion": 0,
     "currentRound": 0,
+    "currentState": "",
     "players": Array [
       Object {
         "name": undefined,
@@ -52,6 +53,7 @@ Object {
     "audienceSize": 0,
     "currentQuestion": 0,
     "currentRound": "TUTORIAL_ROUND",
+    "currentState": "",
     "players": Array [],
     "rounds": Array [
       Object {
@@ -89,40 +91,10 @@ Object {
 exports[`start a new game reducer should handle INIT_GAME request 1`] = `
 Object {
   "currentGame": Object {
-    "audienceSize": 0,
-    "currentQuestion": 0,
-    "currentRound": 0,
-    "players": Array [],
-    "rounds": Array [
-      Object {
-        "id": 1,
-        "questions": Array [
-          Object {
-            "answers": Array [
-              Object {
-                "answer": "",
-                "audienceVotes": 0,
-                "name": "",
-                "score": 0,
-                "votes": Array [
-                  Object {
-                    "name": "",
-                  },
-                ],
-              },
-            ],
-            "content": "",
-            "type": "",
-          },
-        ],
-        "scoreMultiplier": 1,
-        "title": "Round One",
-        "type": "",
-      },
-    ],
+    "currentState": "ADDING_PLAYERS",
   },
   "gameId": 0,
-  "initialized": true,
+  "initialized": false,
 }
 `;
 
@@ -132,6 +104,7 @@ Object {
     "audienceSize": 0,
     "currentQuestion": 0,
     "currentRound": 0,
+    "currentState": "",
     "players": Array [],
     "rounds": Array [
       Object {
