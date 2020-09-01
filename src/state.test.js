@@ -54,6 +54,17 @@ describe("start a new game reducer", () => {
     ).toMatchSnapshot();
   });
 
+  // TEST: add to the audience
+  it("should handle ADD_AUDIENCE request", () => {
+    expect(
+      reducer(initialState, {
+        type: constants.ROUND_ONE,
+      })
+    ).toMatchSnapshot();
+  });
+
+  // **Integration tests**
+  // TEST: Should not start a game with 1 or 2 players
   // TEST 6: should start a game with no more than 8 players
   // TEST 7: should allow audience members
   // TEST 8: should allow the game to start

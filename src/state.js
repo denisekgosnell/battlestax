@@ -87,7 +87,7 @@ export default function reducer(state = initialState, action) {
           currentRound: constants.TUTORIAL_ROUND,
         },
       };
-      
+
     case constants.ROUND_ONE:
       // flips the initialized state for the game payload
       // game's current state should be "TUTORIAL ROUND"
@@ -97,6 +97,13 @@ export default function reducer(state = initialState, action) {
           ...state.currentGame,
           currentRound: constants.ROUND_ONE,
         },
+      };
+
+    case constants.ADD_AUDIENCE:
+      // incriments the audience state value
+      return {
+        ...state,
+        audienceSize: state.audienceSize++
       };
     default:
       return state;
