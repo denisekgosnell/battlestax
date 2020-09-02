@@ -75,11 +75,35 @@ describe("start a new game reducer", () => {
     ).toMatchSnapshot();
   });
 
+  // TEST: should start final round
+  it("should handle END_GAME request", () => {
+    expect(
+      reducer(initialState, {
+        type: constants.END_GAME,
+      })
+    ).toMatchSnapshot();
+  });
+
   // TEST: should change current state to ANSWER_QUESTIONS
   it("should handle ANSWER_QUESTIONS request", () => {
     expect(
       reducer(initialState, {
         type: constants.ANSWER_QUESTIONS,
+      })
+    ).toMatchSnapshot();
+  });
+
+  // TEST: should add an answer from a player for a question
+  it("should handle the ADD_ANSWER request", () => {
+    expect(
+      reducer(initialState, {
+        type: constants.ADD_ANSWER,
+        payload: {
+          answerId: 0,
+          questionId:0,
+          playerId: 0,
+          content: "test answer"
+        }
       })
     ).toMatchSnapshot();
   });
@@ -93,20 +117,28 @@ describe("start a new game reducer", () => {
     ).toMatchSnapshot();
   });
 
-  // TEST: should change current state to AUDIENCE_VOTING
-  it("should handle AUDIENCE_VOTING request", () => {
+  // TEST: should add a vote from a player for an answer
+  it("should handle the ADD_PLAYER_VOTE request", () => {
     expect(
       reducer(initialState, {
-        type: constants.AUDIENCE_VOTING,
+        type: constants.ADD_PLAYER_VOTE,
+        payload: {
+          voteId: 0,
+          questionId: 0,
+          playerId: 0,
+        }
       })
     ).toMatchSnapshot();
   });
 
-  // TEST: should change current state to UPDATE_SCORES
-  it("should handle UPDATE_SCORES request", () => {
+  // TEST: should add a vote from the audience for an answer
+  it("should handle the ADD_AUDIENCE_VOTE request", () => {
     expect(
       reducer(initialState, {
-        type: constants.UPDATE_SCORES,
+        type: constants.ADD_AUDIENCE_VOTE,
+        payload: {
+          answerId: 0,
+        }
       })
     ).toMatchSnapshot();
   });
@@ -128,23 +160,22 @@ describe("start a new game reducer", () => {
       })
     ).toMatchSnapshot();
   });
-
-  // TODO HERE
-  // TEST: adding a question round
-
-  // TEST: adding a final round
-
-  // TEST: changing the current round's state to "ADDING ANSWERS"
+  
+  // TEST: should change current state to UPDATE_SCORES
+  // TODO
+  it("should handle UPDATE_SCORES request", () => {
+    expect(
+      reducer(initialState, {
+        type: constants.UPDATE_SCORES,
+        payload: {
+          playerId: 0,
+          answerId: 0,
+        }
+      })
+    ).toMatchSnapshot();
+  });
 
   // **Integration tests**
   // TEST: Should not start a game with 1 or 2 players
   // TEST 6: should start a game with no more than 8 players
-  // TEST 11: should receive question responses from players
-  // TEST 12: should move to a voting round
-  // TEST 13: should receive votes from players
-  // TEST 14: should receive votes from the audience
-  // TEST 15: should update the leaderboard
-  // TEST 16: should move to the leaderboard
-  // TEST 17: should move to the end game screen
-  // TEST 18: should move to the start game screen
 });

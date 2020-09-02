@@ -43,7 +43,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         players: {
           ...state.players,
-          [action.payload.playerId] : {
+          [action.payload.playerId]: {
             name: action.payload.name,
             vip: !_.size(state.players.Data),
             score: 0,
@@ -60,7 +60,7 @@ export default function reducer(state = initialState, action) {
           ...state.currentState,
           name: constants.TUTORIAL_ROUND,
         },
-        questions: action.payload.questions
+        questions: action.payload.questions,
       };
 
     case constants.ROUND_ONE:
@@ -69,7 +69,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentState: {
           ...state.currentState,
-          roundId: constants.ROUND_ONE
+          roundId: constants.ROUND_ONE,
         },
       };
 
@@ -79,7 +79,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentState: {
           ...state.currentState,
-          roundId: constants.ROUND_TWO
+          roundId: constants.ROUND_TWO,
         },
       };
 
@@ -89,60 +89,65 @@ export default function reducer(state = initialState, action) {
         ...state,
         currentState: {
           ...state.currentState,
-          roundId: constants.FINAL_ROUND
+          roundId: constants.FINAL_ROUND,
         },
       };
-      
+
+    case constants.END_GAME:
+      // game's current round should be "END_GAME"
+      return {
+        ...state,
+        currentState: {
+          ...state.currentState,
+          roundId: constants.END_GAME,
+        },
+      };
+
     case constants.ANSWER_QUESTIONS:
-        // game's current state should be "ANSWER_QUESTIONS"
-        return {
-          ...state,
-          currentState: {
-            ...state.currentState,
-            name: constants.ANSWER_QUESTIONS
-          },
-        };
-  
+      // game's current state should be "ANSWER_QUESTIONS"
+      // this is a game state reducer only
+      return {
+        ...state,
+        currentState: {
+          ...state.currentState,
+          name: constants.ANSWER_QUESTIONS,
+        },
+      };
+
     case constants.PLAYER_VOTING:
       // game's current state should be "PLAYER_VOTING"
+      // this is a game state reducer only
       return {
         ...state,
         currentState: {
           ...state.currentState,
-          name: constants.PLAYER_VOTING
+          name: constants.PLAYER_VOTING,
         },
       };
-    
-    case constants.AUDIENCE_VOTING:
-      // game's current state should be "AUDIENCE_VOTING"
-      return {
-        ...state,
-        currentState: {
-          ...state.currentState,
-          name: constants.AUDIENCE_VOTING
-        },
-      };
-      
+
     case constants.UPDATE_SCORES:
       // game's current state should be "UPDATE_SCORES"
+      // TODO this reducer needs to take the votes for a question
+      // and update each player's score
       return {
         ...state,
         currentState: {
           ...state.currentState,
-          name: constants.UPDATE_SCORES
+          name: constants.UPDATE_SCORES,
         },
       };
-        
+
     case constants.UPDATE_LEADERBOARD:
       // game's current state should be "UPDATE_LEADERBOARD"
+      // this is a game state reducer only
       return {
         ...state,
         currentState: {
           ...state.currentState,
-          name: constants.UPDATE_LEADERBOARD
+          name: constants.UPDATE_LEADERBOARD,
         },
-      };              
-    
+      };
+
     case constants.ADD_AUDIENCE:
       // incriments the audience state value
       return {
@@ -150,32 +155,43 @@ export default function reducer(state = initialState, action) {
         audienceSize: state.audienceSize++,
       };
 
-    // case constants.ADDING_ANSWERS:
-    //   // Flip the bit of the current round to "ADDING ANSWERS"
-    //   return {
-    //     ...state,
-    //     currentGame: {
-    //       ...state.currentGame,
-    //       rounds: [
-    //         ...state.currentGame.rounds,
-    //         // TODO: we are changing the state of the current round to "ADDING ANSWERS"
-    //         // how do we flip this for the current round only?
-    //       ],
-    //     },
-    //   };
+    case constants.ADD_ANSWER:
+      // Add an answer into the state
+      return {
+        ...state,
+        answers: {
+          ...state.answers,
+          [action.payload.answerId]: {
+            questionId: action.payload.questionId,
+            playerId: action.payload.playerId,
+            contnent: action.payload.content,
+          },
+        },
+      };
 
-    // case constants.USER_VOTING:
-    //   // insert a player's vote into the state
-    //   return {
-    //     ...state,
-    //     votes: {
-    //       ...state.votes,
-    //       [action.payload.voteId]: {
-    //         questionId: action.payload.questionId,
-    //         playerId: action.payload.playerId,
-    //       },
-    //     },
-    //   };
+    case constants.ADD_PLAYER_VOTE:
+      // insert a player's vote into the state
+      return {
+        ...state,
+        votes: {
+          ...state.votes,
+          [action.payload.voteId]: {
+            questionId: action.payload.questionId,
+            playerId: action.payload.playerId,
+          },
+        },
+      };
+
+    case constants.ADD_AUDIENCE_VOTE:
+      // insert an audience member's vote into the state
+      return {
+        ...state,
+        audienceVotes: {
+          ...state.audienceVotes,
+          [action.payload.answerId]: [action.payload.answerId]++ ? [action.payload.answerId] in state.audienceVotes : 1, 
+        },
+      };
+
     default:
       return state;
   }
