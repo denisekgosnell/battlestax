@@ -21,6 +21,7 @@ describe("start a new game reducer", () => {
     expect(
       reducer(initialState, {
         type: constants.INIT_GAME,
+        payload: { gameId: 0 },
       })
     ).toMatchSnapshot();
   });
@@ -30,6 +31,7 @@ describe("start a new game reducer", () => {
     expect(
       reducer(initialState, {
         type: constants.ADDING_PLAYERS,
+        payload: { playerId: 0, name: "DKG" },
       })
     ).toMatchSnapshot();
   });
@@ -39,6 +41,9 @@ describe("start a new game reducer", () => {
     expect(
       reducer(initialState, {
         type: constants.START_TUTORIAL,
+        payload: {
+          questions: { 1: { roundId: 0, content: "Does this pass?" } },
+        },
       })
     ).toMatchSnapshot();
   });
