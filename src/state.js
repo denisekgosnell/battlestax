@@ -11,6 +11,7 @@ const initialState = {
   questions: {}, // questionId, roundId, content
   answers: {}, // answerId, questionId, playerId, content
   votes: {}, // voteId, answerId, playerId
+  audienceVotes: {},
 };
 
 export default function reducer(state = initialState, action) {
@@ -188,7 +189,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         audienceVotes: {
           ...state.audienceVotes,
-          [action.payload.answerId]: [action.payload.answerId]++ ? [action.payload.answerId] in state.audienceVotes : 1, 
+          [action.payload.answerId]: state.audienceVotes[action.payload.answerId] ? state.audienceVotes[action.payload.answerId]++ : 1,
         },
       };
 
