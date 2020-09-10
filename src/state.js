@@ -200,15 +200,14 @@ export default function reducer(state = initialState, action) {
     case constants.SET_SCORES:
       // no payload
       // audience aggs to 1 vote
-      // Round 1 50 pts per vote 
+      // Round 1 50 pts per vote
       // Round 2 100 pts per vote
       // Round 3 200 pts per vote
       const multiplier = state.rounds[state.currentState.roundId].multiplier;
       const answers = _.filter();
       return {
         ...state,
-
-      }
+      };
 
     default:
       return state;
