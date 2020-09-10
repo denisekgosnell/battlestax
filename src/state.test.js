@@ -163,13 +163,12 @@ describe("start a new game reducer", () => {
   
   // TEST: should change current state to UPDATE_SCORES
   // TODO
-  it("should handle UPDATE_SCORES request", () => {
+  it("should handle SET_SCORES request", () => {
     expect(
       reducer(initialState, {
-        type: constants.UPDATE_SCORES,
+        type: constants.SET_SCORES,
         payload: {
-          playerId: 0,
-          answerId: 0,
+          questionId: 0
         }
       })
     ).toMatchSnapshot();

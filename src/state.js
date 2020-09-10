@@ -128,8 +128,6 @@ export default function reducer(state = initialState, action) {
 
     case constants.UPDATE_SCORES:
       // game's current state should be "UPDATE_SCORES"
-      // TODO this reducer needs to take the votes for a question
-      // and update each player's score
       return {
         ...state,
         currentState: {
@@ -198,15 +196,94 @@ export default function reducer(state = initialState, action) {
       };
 
     case constants.SET_SCORES:
-      // no payload
+      // should update the player score for the answer
       // audience aggs to 1 vote
       // Round 1 50 pts per vote
-      // Round 2 100 pts per vote
-      // Round 3 200 pts per vote
-      const multiplier = state.rounds[state.currentState.roundId].multiplier;
-      const answers = _.filter();
+      // Round 2 100 pts per vote (2x)
+      // Round 3 200 pts per vote (4x)
+      const multiplier = [state.rounds[state.currentState.roundId]].scoreMultiplier;
+      
+      // get all of the answers for this question
+      var answers = _.pickBy([state.answers], function (value, key) {
+        if (value.questionId === [action.payload.questionId]) {
+          return value;
+        }
+      });
+
+      // get the answer IDs
+      const answerIds = Object.keys(answers); // answers will have exactly 2 elements
+      const answerA = answerIds[0];
+      const answerB = answerIds[1];
+
+      // get the player IDs
+      const playerA = [answers[answerA]].playerId
+      const playerB = [answers[answerB]].playerId
+
+      // get all votes for each answer ID
+      const votesA = _.pickBy([state.votes], function (value, key) {
+        if (value.answerId === answerA) {
+          return value;
+        }
+      });
+      const votesB = _.pickBy(state.votes, function (value, key) {
+        if (value.answerId === answerB) {
+          return value;
+        }
+      });
+      
+      // get all audience votes for each answer ID
+      var audienceA = state.audienceVotes[answerA]
+        ? state.audienceVotes[answerA]
+        : 0;
+      var audienceB = state.audienceVotes[answerB]
+        ? state.audienceVotes[answerB]
+        : 0;
+      
+      // determine who the audience voted for
+      if (audienceA === audienceB){
+        // if they tied audience vote, split the vote
+        audienceA = 0.5;
+        audienceB = 0.5;
+      } else if (audienceA > audienceB){
+        // A gets the audience vote
+        audienceA = 1;
+        audienceB = 0;
+      } else {
+        // B gets the audience vote
+        audienceA = 0;
+        audienceB = 1;
+      }
+
+      // TODO: calculate the total score for A and B
+      const totalScoreA =
+        (votesA.length + audienceA) * multiplier * constants.BASE_POINTS;
+      const totalScoreB =
+        (votesB.length + audienceB) * multiplier * constants.BASE_POINTS;
+      
       return {
         ...state,
+        players: {
+          ...state.players,
+          playerA: {
+            ...state.players[playerA],
+            score: [state.players[playerA]].score + totalScoreA,
+          },
+          playerB: {
+            ...state.players[playerB],
+            score: [state.players[playerB]].score + totalScoreB,
+          }
+        },
+        answers: {
+          ...state.answers,
+          answerA: {
+            ...state.answers[answerA],
+            score: [state.answers[answerA]].score + totalScoreA,
+          },
+          answerB: {
+            ...state.answers[answerB],
+            score: [state.answers[answerB]].score + totalScoreB,
+          }
+        }
       };
 
     default:
