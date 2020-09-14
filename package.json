@@ -12,10 +12,15 @@
     "react-scripts": "3.4.3",
     "redux": "^4.0.5"
   },
+  "devDependencies": {
+    "netlify-cli": "^2.19.0",
+    "netlify-lambda": "^2.0.1",
+    "npm-run-all": "^4.1.5"
+  },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "build": "npm run-script build",
+    "start": "netlify dev",
+    "test": "npm test",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
