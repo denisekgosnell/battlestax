@@ -4,6 +4,7 @@ venv
 
 # dependencies
 /node_modules
+functions/node_modules
 /.pnp
 .pnp.js
 
