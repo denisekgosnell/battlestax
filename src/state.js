@@ -201,89 +201,68 @@ export default function reducer(state = initialState, action) {
       // Round 1 50 pts per vote
       // Round 2 100 pts per vote (2x)
       // Round 3 200 pts per vote (4x)
-      const multiplier = [state.rounds[state.currentState.roundId]].scoreMultiplier;
-      
+      const multiplier =
+        state.rounds[state.currentState.roundId].scoreMultiplier;
       // get all of the answers for this question
-      var answers = _.pickBy([state.answers], function (value, key) {
-        if (value.questionId === [action.payload.questionId]) {
-          return value;
-        }
+      const questionAnswers = _.pickBy(
+        state.answers,
+        (answer) => answer.questionId === action.payload.questionId
+      );
+      let scoredAnswers = _.mapValues(questionAnswers, (answer, answerId) => {
+        // get the votes
+        const votes = _.pickBy(
+          state.votes,
+          (vote) => vote.answerId === answerId
+        );
+        return {
+          ...answer,
+          voteCount: _.keys(votes).length,
+          audienceVotes: state.audienceVotes[answerId]
+            ? state.audienceVotes[answerId]
+            : 0,
+        };
       });
-
-      // get the answer IDs
-      const answerIds = Object.keys(answers); // answers will have exactly 2 elements
-      const answerA = answerIds[0];
-      const answerB = answerIds[1];
-
-      // get the player IDs
-      const playerA = [answers[answerA]].playerId
-      const playerB = [answers[answerB]].playerId
-
-      // get all votes for each answer ID
-      const votesA = _.pickBy([state.votes], function (value, key) {
-        if (value.answerId === answerA) {
-          return value;
-        }
-      });
-      const votesB = _.pickBy(state.votes, function (value, key) {
-        if (value.answerId === answerB) {
-          return value;
-        }
-      });
-      
-      // get all audience votes for each answer ID
-      var audienceA = state.audienceVotes[answerA]
-        ? state.audienceVotes[answerA]
-        : 0;
-      var audienceB = state.audienceVotes[answerB]
-        ? state.audienceVotes[answerB]
-        : 0;
-      
-      // determine who the audience voted for
-      if (audienceA === audienceB){
-        // if they tied audience vote, split the vote
-        audienceA = 0.5;
-        audienceB = 0.5;
-      } else if (audienceA > audienceB){
-        // A gets the audience vote
-        audienceA = 1;
-        audienceB = 0;
+      // update vote count based on audience votes
+      const scoredAnswerKeys = _.keys(scoredAnswers);
+      if (
+        scoredAnswers[scoredAnswerKeys[0]].audienceVotes ===
+        scoredAnswers[scoredAnswerKeys[1]].audienceVotes
+      ) {
+        scoredAnswers[scoredAnswerKeys[0]].voteCount += 0.5;
+        scoredAnswers[scoredAnswerKeys[1]].voteCount += 0.5;
+      } else if (
+        scoredAnswers[scoredAnswerKeys[0]].audienceVotes <
+        scoredAnswers[scoredAnswerKeys[1]].audienceVotes
+      ) {
+        scoredAnswers[scoredAnswerKeys[1]].voteCount++;
       } else {
-        // B gets the audience vote
-        audienceA = 0;
-        audienceB = 1;
+        scoredAnswers[scoredAnswerKeys[0]].voteCount++;
       }
-
-      // TODO: calculate the total score for A and B
-      const totalScoreA =
-        (votesA.length + audienceA) * multiplier * constants.BASE_POINTS;
-      const totalScoreB =
-        (votesB.length + audienceB) * multiplier * constants.BASE_POINTS;
-      
+      // score each answer
+      scoredAnswers = _.mapValues(questionAnswers, (answer) => {
+        return {
+          ...answer,
+          score: answer.voteCount * multiplier * constants.BASE_POINTS,
+        };
+      });
+      // score the players
+      const scoredPlayers = {};
+      _.mapValues(scoredAnswers, (answer) => {
+        scoredPlayers[answer.playerId] = {
+          ...state.players[answer.playerId],
+          score: state.players[answer.playerId].score + answer.score,
+        };
+      });
       return {
         ...state,
         players: {
           ...state.players,
-          playerA: {
-            ...state.players[playerA],
-            score: [state.players[playerA]].score + totalScoreA,
-          },
-          playerB: {
-            ...state.players[playerB],
-            score: [state.players[playerB]].score + totalScoreB,
-          }
+          ...scoredPlayers,
         },
         answers: {
           ...state.answers,
-          answerA: {
-            ...state.answers[answerA],
-            score: [state.answers[answerA]].score + totalScoreA,
-          },
-          answerB: {
-            ...state.answers[answerB],
-            score: [state.answers[answerB]].score + totalScoreB,
-          }
-        }
+          ...scoredAnswers,
+        },
       };
 
     default:

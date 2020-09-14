@@ -10,6 +10,7 @@ venv
 # testing
 /coverage
 /__tests__/__snapshots__
+/src/__snapshots__/
 
 # production
 /build
