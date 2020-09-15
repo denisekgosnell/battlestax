@@ -1,7 +1,9 @@
 exports.handler = async (event, context) => {
   let gameId;
+  let gamePayload;
   try {
-    gameId = event.path.split("getGame/")[1];
+    gameId = event.path.split("insertGame/")[1].split("/")[0];
+    gamePayload = event.path.split("insertGame/")[1].split("/")[1];
   } catch (e) {
     return {
       statusCode: 404,
@@ -18,8 +20,9 @@ exports.handler = async (event, context) => {
   });
 
   try {
-    const res = await stargateClient.get(
-      `/namespaces/${namespace}/collections/${collection}/${gameId}`
+    const res = await stargateClient.patch(
+      `/namespaces/${namespace}/collections/${collection}/${gameId}`,
+      gamePayload
     );
     console.log(res.jsonResponse)
     return {
@@ -27,7 +30,6 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(res.jsonResponse),
     };
   } catch (e) {
-    console.log(res.jsonResponse)
     return {
       statusCode: 400,
       body: JSON.stringify(e),
