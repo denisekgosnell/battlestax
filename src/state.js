@@ -1,9 +1,25 @@
 import constants from "./constants";
 import _ from "lodash";
+import { createStore } from "redux";
+import { composeWithDevTools } from "redux-devtools-extension";
+
+export const actions = {
+  toggleInitialized: () => ({
+    type: constants.APP_INITIALIZED,
+  }),
+  startGame: (gameId) => {
+    // provision the game in Astra
+    // start the game
+    return {
+      type: constants.INIT_GAME,
+      payload: gameId,
+    };
+  },
+};
 
 const initialState = {
-  initialized: false,
-  gameId: "",
+  initialized: true,
+  gameId: null,
   currentState: {}, // name, roundId
   players: {}, // plauyerId, name, totalScore; number of players == number of questions
   audienceSize: 0,
@@ -14,7 +30,7 @@ const initialState = {
   audienceVotes: {},
 };
 
-export default function reducer(state = initialState, action) {
+const reducer = (state = initialState, action) => {
   switch (action.type) {
     case constants.APP_INITIALIZED:
       // flips the initialized state for the app
@@ -29,7 +45,7 @@ export default function reducer(state = initialState, action) {
       // game's current state is "ADDING PLAYERS"
       return {
         ...state,
-        gameId: action.payload.gameId,
+        gameId: action.payload,
         currentState: {
           ...state.currentState,
           name: constants.ADDING_PLAYERS,
@@ -37,8 +53,12 @@ export default function reducer(state = initialState, action) {
       };
 
     case constants.ADDING_PLAYERS:
+      // make sure the player name isn't taken
+      if (state.players[action.payload.playerId]) {
+        return { ...state };
+      }
       // adds a new player to the players list
-      if (_.size(state.players.Data) === constants.MAXIMUM_PLAYERS)
+      if (_.keys(state.players).length === constants.MAXIMUM_PLAYERS)
         return { ...state, audienceSize: state.audienceSize++ };
       return {
         ...state,
@@ -46,7 +66,7 @@ export default function reducer(state = initialState, action) {
           ...state.players,
           [action.payload.playerId]: {
             name: action.payload.name,
-            vip: !_.size(state.players.Data),
+            vip: _.isEmpty(state.players),
             score: 0,
           },
         },
@@ -201,8 +221,9 @@ export default function reducer(state = initialState, action) {
       // Round 1 50 pts per vote
       // Round 2 100 pts per vote (2x)
       // Round 3 200 pts per vote (4x)
-      const multiplier = [state.rounds[state.currentState.roundId]].scoreMultiplier;
-      
+      const multiplier = [state.rounds[state.currentState.roundId]]
+        .scoreMultiplier;
+
       // get all of the answers for this question
       var answers = _.pickBy([state.answers], function (value, key) {
         if (value.questionId === [action.payload.questionId]) {
@@ -216,8 +237,8 @@ export default function reducer(state = initialState, action) {
       const answerB = answerIds[1];
 
       // get the player IDs
-      const playerA = [answers[answerA]].playerId
-      const playerB = [answers[answerB]].playerId
+      const playerA = [answers[answerA]].playerId;
+      const playerB = [answers[answerB]].playerId;
 
       // get all votes for each answer ID
       const votesA = _.pickBy([state.votes], function (value, key) {
@@ -230,7 +251,7 @@ export default function reducer(state = initialState, action) {
           return value;
         }
       });
-      
+
       // get all audience votes for each answer ID
       var audienceA = state.audienceVotes[answerA]
         ? state.audienceVotes[answerA]
@@ -238,13 +259,13 @@ export default function reducer(state = initialState, action) {
       var audienceB = state.audienceVotes[answerB]
         ? state.audienceVotes[answerB]
         : 0;
-      
+
       // determine who the audience voted for
-      if (audienceA === audienceB){
+      if (audienceA === audienceB) {
         // if they tied audience vote, split the vote
         audienceA = 0.5;
         audienceB = 0.5;
-      } else if (audienceA > audienceB){
+      } else if (audienceA > audienceB) {
         // A gets the audience vote
         audienceA = 1;
         audienceB = 0;
@@ -259,7 +280,7 @@ export default function reducer(state = initialState, action) {
         (votesA.length + audienceA) * multiplier * constants.BASE_POINTS;
       const totalScoreB =
         (votesB.length + audienceB) * multiplier * constants.BASE_POINTS;
-      
+
       return {
         ...state,
         players: {
@@ -271,7 +292,7 @@ export default function reducer(state = initialState, action) {
           playerB: {
             ...state.players[playerB],
             score: [state.players[playerB]].score + totalScoreB,
-          }
+          },
         },
         answers: {
           ...state.answers,
@@ -282,11 +303,13 @@ export default function reducer(state = initialState, action) {
           answerB: {
             ...state.answers[answerB],
             score: [state.answers[answerB]].score + totalScoreB,
-          }
-        }
+          },
+        },
       };
 
     default:
       return state;
   }
-}
+};
+
+export const store = createStore(reducer, composeWithDevTools());

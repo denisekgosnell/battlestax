@@ -1,31 +1,57 @@
 import React from "react";
+import { actions } from "../../state";
 import Loading from "../Loading";
-import constants from "../../constants";
+import { Switch, Route, useHistory } from "react-router-dom";
+import { connect } from "react-redux";
+import PlayerLayout from "../PlayerLayout";
+import LobbyLayout from "../LobbyLayout";
+import { Button, TextField, Grid } from "@material-ui/core";
+import faker from "faker";
 import "./index.css";
 
-const stateMapping = (currentState) => {
-  switch (currentState.name) {
-    case constants.ADDING_PLAYERS:
-      return <Loading />;
-    case constants.TUTORIAL_ROUND:
-      return <Loading />;
-    default:
-      return <Loading />;
-  }
-};
-
-const App = ({ initialized, currentState }) => {
+const App = ({ initialized, startGame }) => {
+  const history = useHistory();
   // handle app initialization
   if (!initialized) {
     return <Loading />;
   }
 
-  return <div className="App">{stateMapping[currentState.name]}</div>;
+  const createAndStartGame = () => {
+    const gameId = faker.helpers.replaceSymbols("????");
+    startGame(gameId);
+    history.push(`/lobby/${gameId}`);
+  };
+
+  const joinGame = () => {};
+
+  return (
+    <div className="app-root">
+      <Grid container direction="column" justify="center" alignItems="center">
+        <Switch>
+          <Route exact path="/">
+            <TextField label="Name" variant="outlined" />
+            <TextField label="Game ID" variant="outlined" />
+            <Button onClick={joinGame} variant="outlined">
+              join game
+            </Button>
+            <Button onClick={createAndStartGame} variant="outlined">
+              start new game
+            </Button>
+          </Route>
+          <Route exact path="/game/:gameid">
+            <PlayerLayout />
+          </Route>
+          <Route exact path="/lobby/:gameId">
+            <LobbyLayout />
+          </Route>
+        </Switch>
+      </Grid>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => ({
   initialized: state.initialized,
-  currentState: state.currentState,
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { startGame: actions.startGame })(App);
