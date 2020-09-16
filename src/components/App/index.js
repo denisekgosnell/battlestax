@@ -1,5 +1,6 @@
 import React from "react";
 import { actions } from "../../state";
+import { createGame } from "../../api";
 import Loading from "../Loading";
 import { Switch, Route, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
@@ -16,8 +17,9 @@ const App = ({ initialized, startGame }) => {
     return <Loading />;
   }
 
-  const createAndStartGame = () => {
+  const createAndStartGame = async () => {
     const gameId = faker.helpers.replaceSymbols("????");
+    await createGame(gameId);
     startGame(gameId);
     history.push(`/lobby/${gameId}`);
   };

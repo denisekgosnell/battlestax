@@ -39,8 +39,6 @@ class Client {
   }
 
   get(path) {
-    console.log("******* GET REQUEST ******")
-    console.log(path)
     return request(this.baseUrl + path, methods.get, this.accessToken);
   }
 

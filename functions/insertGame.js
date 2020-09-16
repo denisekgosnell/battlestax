@@ -1,11 +1,11 @@
-const stargate = require("./utils/stargate.js")
+const stargate = require("./utils/stargate.js");
 
 exports.handler = async (event, context) => {
   let gameId;
   let gamePayload;
   try {
-    gameId = event.path.split("insertGame/")[1].split("/")[0];
-    gamePayload = event.path.split("insertGame/")[1].split("/")[1];
+    gameId = event.path.split("insertGame/")[1];
+    gamePayload = JSON.parse(event.body);
   } catch (e) {
     return {
       statusCode: 404,
@@ -31,6 +31,7 @@ exports.handler = async (event, context) => {
       body: JSON.stringify(res.jsonResponse),
     };
   } catch (e) {
+    console.log(e);
     return {
       statusCode: 400,
       body: JSON.stringify(e),
