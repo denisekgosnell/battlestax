@@ -4,12 +4,14 @@ venv
 
 # dependencies
 /node_modules
+functions/node_modules
 /.pnp
 .pnp.js
 
 # testing
 /coverage
 /__tests__/__snapshots__
+src/__snapshots__/
 
 # production
 /build
