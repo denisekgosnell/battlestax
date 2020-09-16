@@ -5,7 +5,7 @@ const initialState = {
   initialized: false,
   gameId: "",
   currentState: {}, // name, roundId
-  players: {}, // plauyerId, name, score; number of players == number of questions
+  players: {}, // playerId, name, score; number of players == number of questions
   audienceSize: 0,
   rounds: {}, // roundId, type, title, score multiplier
   questions: {}, // questionId, roundId, content

@@ -1,3 +1,5 @@
+const stargate = require("./utils/stargate.js")
+
 exports.handler = async (event, context) => {
   let gameId;
   let gamePayload;
@@ -15,8 +17,8 @@ exports.handler = async (event, context) => {
 
   const stargateClient = await stargate.createClient({
     baseUrl: `https://${process.env.ASTRA_DB_ID}-${process.env.ASTRA_DB_REGION}.apps.astra.datastax.com`,
-    username: process.env.STARGATE_USERNAME,
-    password: process.env.STARGATE_PASSWORD,
+    username: process.env.ASTRA_DB_USERNAME,
+    password: process.env.ASTRA_DB_PASSWORD,
   });
 
   try {
@@ -24,7 +26,6 @@ exports.handler = async (event, context) => {
       `/namespaces/${namespace}/collections/${collection}/${gameId}`,
       gamePayload
     );
-    console.log(res.jsonResponse)
     return {
       statusCode: 200,
       body: JSON.stringify(res.jsonResponse),
