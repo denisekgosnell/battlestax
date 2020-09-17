@@ -9,17 +9,27 @@ export const actions = {
   }),
   startGame: (gameId) => {
     // provision the game in Astra
+    // build out questions, rounds etc
     // start the game
     return {
       type: constants.INIT_GAME,
       payload: gameId,
     };
   },
+  addPlayer: (player) => ({
+    type: constants.ADDING_PLAYERS,
+    payload: player,
+  }),
+  setCurrentPlayer: (playerId) => ({
+    type: constants.SET_CURRENT_PLAYER,
+    payload: playerId,
+  }),
 };
 
 const initialState = {
   initialized: true,
-  gameId: null,
+  gameId: "",
+  currentPlayerId: "",
   currentState: {}, // name, roundId
   players: {}, // plauyerId, name, totalScore; number of players == number of questions
   audienceSize: 0,

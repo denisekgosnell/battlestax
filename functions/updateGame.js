@@ -1,10 +1,10 @@
 const stargate = require("./utils/stargate.js");
 
 exports.handler = async (event, context) => {
-  let gameId;
+  let path;
   let gamePayload;
   try {
-    gameId = event.path.split("insertGame/")[1];
+    path = event.path.split("updateGame/")[1];
     gamePayload = JSON.parse(event.body);
   } catch (e) {
     return {
@@ -22,8 +22,9 @@ exports.handler = async (event, context) => {
   });
 
   try {
-    const res = await stargateClient.patch(
-      `/namespaces/${namespace}/collections/${collection}/${gameId}`,
+    console.log(path, gamePayload);
+    const res = await stargateClient[event.httpMethod.toLowerCase()](
+      `/namespaces/${namespace}/collections/${collection}/${path}`,
       gamePayload
     );
     return {

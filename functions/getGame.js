@@ -1,4 +1,4 @@
-const stargate = require("./utils/stargate.js")
+const stargate = require("./utils/stargate.js");
 
 exports.handler = async (event, context) => {
   let gameId;
@@ -16,6 +16,7 @@ exports.handler = async (event, context) => {
     username: process.env.ASTRA_DB_USERNAME,
     password: process.env.ASTRA_DB_PASSWORD,
   });
+
   try {
     const res = await stargateClient.get(
       `/namespaces/${namespace}/collections/${collection}/${gameId}`

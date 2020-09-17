@@ -1,10 +1,7 @@
 import React from "react";
 import constants from "../../constants";
-import AddPlayers from "../Screens/AddPlayers";
+import AddPlayers from "../LobbyScreens/AddPlayers";
 import { connect } from "react-redux";
-
-// poll for new players
-// Api.getGame(`/${gameId}/players`)
 
 const LobbyLayout = ({ currentState }) => {
   switch (currentState.name) {

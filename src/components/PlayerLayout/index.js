@@ -1,21 +1,18 @@
 import React from "react";
-import Loading from "../Loading";
 import constants from "../../constants";
+import AddPlayers from "../PlayerScreens/AddPlayers";
 import { connect } from "react-redux";
 
-const stateMapping = (currentState) => {
-  switch (currentState.name) {
-    case constants.ADDING_PLAYERS:
-      return <Loading />;
-    case constants.TUTORIAL_ROUND:
-      return <Loading />;
-    default:
-      return <Loading />;
-  }
-};
+// poll for new players
+// Api.getGame(`/${gameId}/players`)
 
 const PlayerLayout = ({ currentState }) => {
-  return <div>{stateMapping[currentState.name]}</div>;
+  switch (currentState.name) {
+    case constants.ADDING_PLAYERS:
+      return <AddPlayers />;
+    default:
+      return <AddPlayers />;
+  }
 };
 
 const mapStateToProps = (state) => ({

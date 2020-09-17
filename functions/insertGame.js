@@ -12,6 +12,8 @@ exports.handler = async (event, context) => {
     };
   }
 
+  console.log(gamePayload);
+
   const namespace = process.env.ASTRA_DB_KEYSPACE;
   const collection = process.env.GAMES_COLLECTION;
 

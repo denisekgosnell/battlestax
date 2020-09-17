@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { actions } from "../../state";
-import { createGame } from "../../api";
+import { createGame, addPlayer } from "../../api";
 import Loading from "../Loading";
 import { Switch, Route, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
@@ -10,29 +10,51 @@ import { Button, TextField, Grid } from "@material-ui/core";
 import faker from "faker";
 import "./index.css";
 
-const App = ({ initialized, startGame }) => {
+const App = ({
+  initialized,
+  startGame,
+  currentPlayerId,
+  setCurrentPlayer,
+  gameId,
+}) => {
   const history = useHistory();
+  const [playerId, setPlayerId] = useState(currentPlayerId);
+  const [currentGameId, setCurrentGameId] = useState(gameId);
   // handle app initialization
   if (!initialized) {
     return <Loading />;
   }
 
   const createAndStartGame = async () => {
-    const gameId = faker.helpers.replaceSymbols("????");
-    await createGame(gameId);
-    startGame(gameId);
-    history.push(`/lobby/${gameId}`);
+    const newGameId = faker.helpers.replaceSymbols("????");
+    await createGame(newGameId);
+    startGame(newGameId);
+    history.push(`/lobby/${newGameId}`);
   };
 
-  const joinGame = () => {};
+  const joinGame = async () => {
+    await addPlayer(currentGameId, playerId);
+    setCurrentPlayer(playerId);
+    history.push(`/player/${currentGameId}`);
+  };
 
   return (
     <div className="app-root">
       <Grid container direction="column" justify="center" alignItems="center">
         <Switch>
           <Route exact path="/">
-            <TextField label="Name" variant="outlined" />
-            <TextField label="Game ID" variant="outlined" />
+            <TextField
+              label="Name"
+              variant="outlined"
+              onChange={(e) => setPlayerId(e.target.value)}
+              value={playerId}
+            />
+            <TextField
+              label="Game ID"
+              variant="outlined"
+              value={currentGameId}
+              onChange={(e) => setCurrentGameId(e.target.value)}
+            />
             <Button onClick={joinGame} variant="outlined">
               join game
             </Button>
@@ -40,7 +62,7 @@ const App = ({ initialized, startGame }) => {
               start new game
             </Button>
           </Route>
-          <Route exact path="/game/:gameid">
+          <Route exact path="/player/:gameid">
             <PlayerLayout />
           </Route>
           <Route exact path="/lobby/:gameId">
@@ -54,6 +76,11 @@ const App = ({ initialized, startGame }) => {
 
 const mapStateToProps = (state) => ({
   initialized: state.initialized,
+  currentPlayerId: state.currentPlayerId,
+  gameId: state.gameId,
 });
 
-export default connect(mapStateToProps, { startGame: actions.startGame })(App);
+export default connect(mapStateToProps, {
+  startGame: actions.startGame,
+  setCurrentPlayer: actions.setCurrentPlayer,
+})(App);
