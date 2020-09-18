@@ -9,6 +9,9 @@ import { BrowserRouter } from "react-router-dom";
 import { store } from "./state";
 import { theme } from "./theme";
 
+// initialize the app
+// setTimeout(() => store.dispatch(actions.toggleInitialized()), 2000);
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>

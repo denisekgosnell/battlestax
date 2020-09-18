@@ -10,3 +10,18 @@ body,
 .app-root {
   display: flex;
 }
+
+.highlight {
+  display: inline-block;
+  padding: 20px 20px 10px 20px;
+  background-color: #ffb74d;
+  color: #303030;
+}
+
+.vip {
+  font-size: 10px;
+  display: inline-block;
+  padding: 4px 4px 2px 4px;
+  background-color: #81c784;
+  color: #424242;
+}

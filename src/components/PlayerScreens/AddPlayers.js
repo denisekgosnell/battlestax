@@ -4,8 +4,19 @@ import { Grid, Typography } from "@material-ui/core";
 
 const AddPlayers = ({ gameId }) => {
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Typography variant="h3">welcome to {gameId}, friend!</Typography>
+    <Grid
+      container
+      direction="column"
+      justify="center"
+      alignItems="center"
+      style={{ width: 320 }}
+    >
+      <Typography variant="h4" paragraph>
+        BattleStax
+      </Typography>
+      <Typography color="textSecondary">
+        Simmer down, we're waiting for more players
+      </Typography>
     </Grid>
   );
 };
