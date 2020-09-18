@@ -1,15 +1,17 @@
 import constants from "./constants";
+import data from "./data";
 import _ from "lodash";
 import { createStore } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import faker from "faker";
 
 export const actions = {
   toggleInitialized: () => ({
     type: constants.APP_INITIALIZED,
   }),
-  startGame: (gameId) => {
+  initGame: (gameId) => {
     // provision the game in Astra
-    // build out questions, rounds etc
+
     // start the game
     return {
       type: constants.INIT_GAME,
@@ -24,6 +26,29 @@ export const actions = {
     type: constants.SET_CURRENT_PLAYER,
     payload: playerId,
   }),
+  startGame: () => {
+    // build out questions
+    const currentState = store.getState();
+    const playerIds = _.keys(currentState.players);
+    const randomQuestions = {
+      1: _.sample(data.roundOneQuestions, playerIds.length),
+      2: _.sample(data.roundTwoQuestions, playerIds.length),
+      3: _.sample(data.comics, 1),
+    };
+    const questions = {};
+    _.keys(randomQuestions).forEach((roundId) => {
+      randomQuestions[roundId].forEach((question) => {
+        questions[faker.helpers.replaceSymbols("????")] = {
+          round: roundId,
+          content: question,
+        };
+      });
+    });
+    return {
+      type: constants.SET_QUESTIONS,
+      payload: questions,
+    };
+  },
 };
 
 const initialState = {
@@ -33,7 +58,23 @@ const initialState = {
   currentState: {}, // name, roundId
   players: {}, // plauyerId, name, totalScore; number of players == number of questions
   audienceSize: 0,
-  rounds: {}, // roundId, type, title, score multiplier
+  rounds: {
+    1: {
+      type: "question",
+      title: "Round One",
+      scoreMultiplier: 1,
+    },
+    2: {
+      type: "question",
+      title: "Round One",
+      scoreMultiplier: 2,
+    },
+    3: {
+      type: "comic",
+      title: "Final Round",
+      scoreMultiplier: 3,
+    },
+  }, // roundId, type, title, score multiplier
   questions: {}, // questionId, roundId, content
   answers: {}, // answerId, questionId, playerId, content, score
   votes: {}, // voteId, answerId, playerId
@@ -82,6 +123,13 @@ const reducer = (state = initialState, action) => {
         },
       };
 
+    case constants.SET_QUESTIONS:
+      // game's current round should be "ROUND ONE"
+      return {
+        ...state,
+        questions: action.payload.questions,
+      };
+
     case constants.START_TUTORIAL:
       // game's current round is "TUTORIAL ROUND"
       // questions payload is initialized from the action
@@ -100,6 +148,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         currentState: {
           ...state.currentState,
+          name: constants.ROUND_INPUT,
           roundId: constants.ROUND_ONE,
         },
       };

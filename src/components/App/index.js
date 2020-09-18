@@ -12,7 +12,7 @@ import "./index.css";
 
 const App = ({
   initialized,
-  startGame,
+  initGame,
   currentPlayerId,
   setCurrentPlayer,
   gameId,
@@ -25,10 +25,10 @@ const App = ({
     return <Loading />;
   }
 
-  const createAndStartGame = async () => {
+  const createAndInitGame = async () => {
     const newGameId = faker.helpers.replaceSymbols("????");
     await createGame(newGameId);
-    startGame(newGameId);
+    initGame(newGameId);
     history.push(`/lobby/${newGameId}`);
   };
 
@@ -58,7 +58,7 @@ const App = ({
             <Button onClick={joinGame} variant="outlined">
               join game
             </Button>
-            <Button onClick={createAndStartGame} variant="outlined">
+            <Button onClick={createAndInitGame} variant="outlined">
               start new game
             </Button>
           </Route>
@@ -81,6 +81,6 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  startGame: actions.startGame,
+  initGame: actions.initGame,
   setCurrentPlayer: actions.setCurrentPlayer,
 })(App);

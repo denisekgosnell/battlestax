@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import constants from "../../constants";
 import { actions } from "../../state";
 import { connect } from "react-redux";
@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@material-ui/core";
 
-const AddPlayers = ({ gameId, players, addPlayer }) => {
+const AddPlayers = ({ gameId, players, addPlayer, audienceSize }) => {
   let pollingInterval;
   useEffect(() => {
     pollingInterval = setInterval(async () => {
@@ -32,7 +32,13 @@ const AddPlayers = ({ gameId, players, addPlayer }) => {
   }, []);
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
+    <Grid
+      container
+      direction="column"
+      justify="center"
+      alignItems="center"
+      spacing={2}
+    >
       <Typography variant="h3">{gameId}</Typography>
       <List>
         {_.map(_.keys(players), (playerId) => (
@@ -47,6 +53,7 @@ const AddPlayers = ({ gameId, players, addPlayer }) => {
       {_.keys(players).length < constants.MINIMUM_PLAYERS && (
         <Typography>need moar players y'all!</Typography>
       )}
+      {audienceSize !== 0 && <Typography>{audienceSize} memebers</Typography>}
     </Grid>
   );
 };
@@ -54,6 +61,7 @@ const AddPlayers = ({ gameId, players, addPlayer }) => {
 const mapStateToProps = (state) => ({
   gameId: state.gameId,
   players: state.players,
+  audienceSize: state.audienceSize,
 });
 
 export default connect(mapStateToProps, { addPlayer: actions.addPlayer })(

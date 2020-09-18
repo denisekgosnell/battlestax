@@ -1,5 +1,5 @@
 export default {
-  quetions: [
+  roundOneQuestions: [
     "_____: kid tested, mother approved.",
     "What is the next Happy Meal Toy?",
     "What gets better with age?",
@@ -8,6 +8,8 @@ export default {
     "What is next in 2020?",
     "What is fun until it gets weird?",
     "The title of the shortest book on earth.",
+  ],
+  roundTwoQuestions: [
     "The most expensive software ever imagined.",
     "The most awkward moment in earth's history.",
     "No. NO. NO! I will not let _____ ruin my day.",
@@ -15,7 +17,7 @@ export default {
     "The one thing that will prevent us from reaching 2021.",
     "The title of a movie that everyone secretly loves, but will never admit to.",
     "The end of the Silicon Valley will come from _____.",
-    "The most annoying thing about Twitter." 
+    "The most annoying thing about Twitter.",
   ],
   comics: [
     "/comics/sleep.png",
