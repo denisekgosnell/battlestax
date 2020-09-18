@@ -13,9 +13,9 @@ import {
 } from "@material-ui/core";
 
 const AddPlayers = ({ gameId, players, addPlayer, audienceSize }) => {
-  let pollingInterval;
   useEffect(() => {
-    pollingInterval = setInterval(async () => {
+    console.log("interval invoked");
+    const pollingInterval = setInterval(async () => {
       const game = await getGame(`${gameId}`);
       if (game.data.players) {
         _.keys(game.data.players).forEach((playerId) => {
@@ -25,11 +25,11 @@ const AddPlayers = ({ gameId, players, addPlayer, audienceSize }) => {
           });
         });
       }
-    }, 3000);
+    }, 2000);
     return () => {
       clearInterval(pollingInterval);
     };
-  }, []);
+  }, [addPlayer, gameId]);
 
   return (
     <Grid
