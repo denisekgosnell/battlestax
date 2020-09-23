@@ -1,0 +1,28 @@
+import { generateShortId } from "../util/random";
+import _ from "lodash";
+import reducer, {
+  initialState,
+  addAnswer,
+  selectAnswers,
+} from "./answersSlice";
+
+describe("answers slice", () => {
+  it("should return the initial state on first run", () => {
+    const nextState = initialState;
+    const result = reducer(undefined, {});
+    expect(result).toEqual(nextState);
+  });
+
+  it("should add an answer", () => {
+    const answer = {
+      id: generateShortId(),
+      question: generateShortId(),
+      player: generateShortId(),
+      content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+    };
+    const nextState = reducer(initialState, addAnswer(answer));
+    const rootState = { answers: nextState };
+    expect(_.keys(selectAnswers(rootState)).length).toEqual(1);
+    expect(selectAnswers(rootState)[answer.id].id).toEqual(answer.id);
+  });
+});
