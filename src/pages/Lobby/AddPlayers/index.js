@@ -14,7 +14,7 @@ export default function AddPlayers() {
     <Grid container direction="row" justify="center" alignItems="center">
       <Grid item>
         <Typography color="textSecondary">welcome to</Typography>
-        <Typography variant="h2" style={{ marginBottom: 64 }}>
+        <Typography variant="h4" style={{ marginBottom: 64 }}>
           BattleStax
         </Typography>
         <Typography color="textSecondary">game code</Typography>

@@ -47,12 +47,19 @@ export default function RoundInput() {
         question: roundQuestionIds[0],
       });
     }
-  }, [gameId, shouldTransition]);
+  }, [gameId, shouldTransition, questions, roundId]);
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Typography paragraph>Put in those answers, yo!</Typography>
-      <Countdown duration={constants.ROUND_INPUT_TIMER} />
+      <Grid item xs={6}>
+        <Typography paragraph>
+          Two statements have been sent to your device, hurry up and fill them
+          in!
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Countdown duration={constants.ROUND_INPUT_TIMER} />
+      </Grid>
     </Grid>
   );
 }

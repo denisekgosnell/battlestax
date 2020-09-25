@@ -2,7 +2,7 @@ import React from "react";
 import constants from "../../../constants";
 import { updateGame } from "../../../api";
 import { useSelector } from "react-redux";
-import { Grid, Typography } from "@material-ui/core";
+import { Divider, Grid, Typography } from "@material-ui/core";
 import {
   selectId,
   selectRound,
@@ -12,25 +12,7 @@ import { selectAnswers } from "../../../store/answersSlice";
 import { selectQuestions } from "../../../store/questionsSlice";
 import { selectVotes } from "../../../store/votesSlice";
 import { selectPlayers } from "../../../store/playersSlice";
-import Countdown from "../../../components/Countdown";
 import _ from "lodash";
-
-const Vote = ({ question, answers, votes }) => {
-  return (
-    <React.Fragment>
-      <Typography paragraph>{question.content}</Typography>
-      <Grid container>
-        {_.keys(answers).map((answerId) => (
-          <Grid item xs={6} key={answerId}>
-            <Typography>{answers[answerId].player}</Typography>
-            <Typography>{answers[answerId].content}</Typography>
-          </Grid>
-        ))}
-      </Grid>
-      <Countdown duration={constants.ROUND_VOTE_TIMER} />
-    </React.Fragment>
-  );
-};
 
 export default function RoundVote() {
   const gameId = useSelector(selectId);
@@ -41,16 +23,17 @@ export default function RoundVote() {
   const players = useSelector(selectPlayers);
   const questions = useSelector(selectQuestions);
   const votes = useSelector(selectVotes);
-  const roundQuestions = _.pickBy(
-    questions,
-    (question) => question.round === roundId
-  );
-  const questionAnswers = _.pickBy(
-    answers,
-    (answer) => answer.question === currentQuestionId
-  );
   const [votedQuestions, setVotedQuestions] = React.useState([]);
+
   React.useEffect(() => {
+    const roundQuestions = _.pickBy(
+      questions,
+      (question) => question.round === roundId
+    );
+    const questionAnswers = _.pickBy(
+      answers,
+      (answer) => answer.question === currentQuestionId
+    );
     const answerVotes = _.pickBy(votes, (vote) =>
       _.keys(questionAnswers).includes(vote.answer)
     );
@@ -64,10 +47,10 @@ export default function RoundVote() {
       );
       if (remaingQuestions.length === 0) {
         console.log(`round complete: ${roundId}`);
-        // updateGame(`${gameId}/game`, {
-        //   page: constants.ROUND_SCORE_PAGE,
-        //   question: "",
-        // });
+        updateGame(`${gameId}/game`, {
+          page: constants.ROUND_SCORE_PAGE,
+          question: "",
+        });
       } else {
         updateGame(`${gameId}/game`, {
           question: remaingQuestions[0],
@@ -77,15 +60,33 @@ export default function RoundVote() {
   }, [votes]);
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Typography paragraph>{currentRound.title}</Typography>
-      <Vote
-        question={questions[currentQuestionId]}
-        answers={_.pickBy(
-          answers,
-          (answer) => answer.question === currentQuestionId
-        )}
-      ></Vote>
+    <Grid
+      container
+      direction="row"
+      justify="center"
+      alignItems="center"
+      spacing={4}
+    >
+      <Grid item xs={12}>
+        <Typography color="textSecondary" paragraph>
+          {currentRound.title}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography variant="h6" paragraph>
+          {questions[currentQuestionId].content}
+        </Typography>
+      </Grid>
+      {_.keys(
+        _.pickBy(answers, (answer) => answer.question === currentQuestionId)
+      ).map((answerId) => (
+        <Grid item xs={12} key={answerId}>
+          <Typography variant="h5" paragraph>
+            {answers[answerId].player}'s answer: {answers[answerId].content}
+          </Typography>
+          <Divider />
+        </Grid>
+      ))}
     </Grid>
   );
 }

@@ -27,41 +27,47 @@ export default function JoinGame() {
   };
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-      style={{ width: 320 }}
-    >
-      <Typography variant="h4" paragraph>
-        BattleStax
-      </Typography>
-      <TextField
-        style={{ marginBottom: 16 }}
-        label="name"
-        variant="outlined"
-        onChange={(e) => setNewPlayer(e.target.value)}
-        value={newPlayer}
-      />
-      <TextField
-        style={{ marginBottom: 16 }}
-        inputProps={{ style: { textTransform: "uppercase" } }}
-        label="game code"
-        variant="outlined"
-        value={newGameId}
-        onChange={(e) => setNewGameId(e.target.value)}
-      />
-      <Button
-        fullWidth
-        disableElevation
-        onClick={joinGame}
-        size="large"
-        variant="contained"
-        color="primary"
+    <Grid container justify="center">
+      <Grid
+        container
+        direction="column"
+        justify="center"
+        alignItems="center"
+        style={{ width: 320 }}
       >
-        join game
-      </Button>
+        <Grid item style={{ width: 300, marginBottom: 16 }}>
+          <Typography color="textSecondary">welcome to</Typography>
+          <Typography variant="h5" paragraph>
+            BattleStax
+          </Typography>
+        </Grid>
+
+        <TextField
+          style={{ marginBottom: 16 }}
+          label="name"
+          variant="outlined"
+          onChange={(e) => setNewPlayer(e.target.value)}
+          value={newPlayer}
+        />
+        <TextField
+          style={{ marginBottom: 16 }}
+          inputProps={{ style: { textTransform: "uppercase" } }}
+          label="game code"
+          variant="outlined"
+          value={newGameId}
+          onChange={(e) => setNewGameId(e.target.value)}
+        />
+        <Button
+          fullWidth
+          disableElevation
+          onClick={joinGame}
+          size="large"
+          variant="contained"
+          color="primary"
+        >
+          join game
+        </Button>
+      </Grid>
     </Grid>
   );
 }

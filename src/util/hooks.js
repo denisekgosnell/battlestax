@@ -25,7 +25,9 @@ export const useGamePollingInterval = () => {
     }
     const pollingInterval = setInterval(async () => {
       const game = await getGame(`${gameId}`);
-      console.log(game);
+      if (!game && !game.data) {
+        return;
+      }
       batch(() => {
         if (game.data.players) {
           _.keys(game.data.players).forEach((playerId) => {

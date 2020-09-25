@@ -4,7 +4,7 @@ import { Typography } from "@material-ui/core";
 
 const renderer = ({ minutes, seconds }) => {
   return (
-    <Typography variant="overline">
+    <Typography variant="h2" className="highlight">
       {minutes !== 0 && `${minutes}:`}
       {seconds}
     </Typography>

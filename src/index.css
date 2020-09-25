@@ -18,6 +18,17 @@ body,
   color: #303030;
 }
 
+.small-highlight {
+  display: inline-block;
+  padding: 8px 8px 4px 8px;
+  background-color: #ffb74d;
+  color: #303030;
+}
+
+.score {
+  color: #81c784;
+}
+
 .vip {
   font-size: 10px;
   display: inline-block;

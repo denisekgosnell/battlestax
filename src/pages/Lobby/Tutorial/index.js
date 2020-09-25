@@ -32,11 +32,15 @@ export default function Tutorial() {
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">
-      <Typography paragraph>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis sit amet
-        congue lacus, at suscipit orci. Praesent porta erat sit amet commodo
-        dictum. Pellentesque dapibus faucibus magna at pretium.
-      </Typography>
+      <Grid item xs={12}>
+        <Typography variant="h6" paragraph>
+          Listen, this is easy, just answer the questions.
+        </Typography>
+        <Typography variant="h6" style={{ marginBottom: 64 }}>
+          Then, vote for your favorites.
+        </Typography>
+      </Grid>
+
       <Countdown duration={constants.TUTORIAL_LENGTH} />
     </Grid>
   );

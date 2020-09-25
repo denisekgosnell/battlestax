@@ -14,18 +14,19 @@ import {
 
 export default function PlayerList({ players, audienceSize, showScore }) {
   let playerList = [];
-  if (showScore) {
-    playerList = _.orderBy(playerList, ["score"], ["desc"]);
-  }
   const playerKeys = _.keys(players);
   for (let i = 0; i < constants.MAXIMUM_PLAYERS; i++) {
     const toPush = i < playerKeys.length ? players[playerKeys[i]] : null;
     playerList.push(toPush);
+    if(showScore && i < playerKeys.length) {
+      playerList = _.orderBy(playerList, ["score"], ["desc"]);
+    }
   }
 
   return (
     <Grid style={{ width: 320, marginLeft: 124 }}>
-      <Typography color="textSecondary">players</Typography>
+      {showScore && <Typography color="textSecondary">scoreboard</Typography>}
+      {!showScore && <Typography color="textSecondary">players</Typography>}
       <Paper style={{ marginBottom: 16 }} square elevation={0}>
         <List>
           {_.map(playerList, (player, index) => (
@@ -39,7 +40,14 @@ export default function PlayerList({ players, audienceSize, showScore }) {
                       <Typography color="textSecondary">...</Typography>
                     )
                   }
-                  secondary={showScore && player && player.score}
+                  secondary={
+                    showScore &&
+                    player && (
+                      <Typography className="score">
+                        {player.score.toLocaleString()}
+                      </Typography>
+                    )
+                  }
                 />
                 {player && player.vip && (
                   <ListItemSecondaryAction>

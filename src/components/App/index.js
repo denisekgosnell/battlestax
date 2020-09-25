@@ -1,7 +1,6 @@
 import React from "react";
 import Loading from "../Loading";
 import { Switch, Route } from "react-router-dom";
-import { Grid } from "@material-ui/core";
 import { useSelector } from "react-redux";
 import { selectInitialized } from "../../store/appSlice";
 import LobbyLayout from "../LobbyLayout";
@@ -18,22 +17,20 @@ export default function App() {
 
   return (
     <div className="app-root">
-      <Grid container direction="column" justify="center" alignItems="center">
-        <Switch>
-          <Route exact path="/">
-            <JoinGame />
-          </Route>
-          <Route exact path="/player/:gameid">
-            <PlayerLayout />
-          </Route>
-          <Route exact path="/lobby">
-            <NewGame />
-          </Route>
-          <Route exact path="/lobby/:gameId">
-            <LobbyLayout />
-          </Route>
-        </Switch>
-      </Grid>
+      <Switch>
+        <Route exact path="/">
+          <JoinGame />
+        </Route>
+        <Route exact path="/player/:gameid">
+          <PlayerLayout />
+        </Route>
+        <Route exact path="/lobby">
+          <NewGame />
+        </Route>
+        <Route exact path="/lobby/:gameId">
+          <LobbyLayout />
+        </Route>
+      </Switch>
     </div>
   );
 }

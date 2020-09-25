@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { updateGame } from "../../../api";
 import { selectPlayers } from "../../../store/playersSlice";
@@ -16,6 +17,7 @@ import {
 } from "../../../store/gameSlice";
 
 export default function RoundScore() {
+  const history = useHistory();
   const players = useSelector(selectPlayers);
   const gameId = useSelector(selectId);
   const roundId = useSelector(selectRound);
@@ -35,7 +37,7 @@ export default function RoundScore() {
     _.keys(roundAnswers).includes(vote.answer)
   );
 
-  React.useEffect(() => {
+  const updateScore = () => {
     const nextRound = currentRound.id + 1;
     const newPlayers = _.cloneDeep(players);
     _.keys(roundVotes).forEach((voteId) => {
@@ -47,15 +49,19 @@ export default function RoundScore() {
       };
     });
     updateGame(`${gameId}/players`, newPlayers);
-    let next = { page: constants.FINAL_PAGE, round: "" };
-    if (nextRound <= constants.ROUNDS.length) {
-      next = { page: constants.ROUND_INPUT_PAGE, round: nextRound };
-    }
-    console.log(next);
     setTimeout(() => {
+      let next = { page: constants.FINAL_PAGE, round: "" };
+      if (nextRound <= constants.ROUNDS.length) {
+        next = { page: constants.ROUND_INPUT_PAGE, round: nextRound };
+      }
       updateGame(`${gameId}/game`, next);
+      if (next.page === constants.FINAL_PAGE) {
+        history.push("/lobby");
+      }
     }, constants.ROUND_SCORE_TIMER);
-  }, []);
+  };
+
+  React.useEffect(updateScore, []);
 
   return (
     <Grid container direction="column" justify="center" alignItems="center">

@@ -21,41 +21,45 @@ export default function RoundVote() {
   );
   const [voted, setVoted] = React.useState(false);
 
-  const sendVote = async (answerId) => {
-    await updateGame(`${gameId}/votes`, {
+  const sendVote = (answerId) => {
+    setVoted(true);
+    updateGame(`${gameId}/votes`, {
       [`${player}-${currentQuestionId}`]: {
         player,
         answer: answerId,
       },
     });
-    setVoted(true);
   };
 
   if (
     voted ||
     !_.isEmpty(_.pickBy(questionAnswers, (answer) => answer.player === player))
   ) {
-    return <Typography>hang tight</Typography>;
+    return <React.Fragment />;
   }
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Typography paragraph>who won this round?</Typography>
-      {_.keys(questionAnswers).map((answerId) => (
-        <Button
-          key={answerId}
-          style={{ marginTop: 16 }}
-          fullWidth
-          disableElevation
-          size="large"
-          disabled={voted}
-          variant="contained"
-          color="primary"
-          onClick={() => sendVote(answerId)}
-        >
-          {answers[answerId].player}
-        </Button>
-      ))}
-    </Grid>
+    <React.Fragment>
+      <Grid item xs={12}>
+        <Typography paragraph>who did it better?</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        {_.keys(questionAnswers).map((answerId) => (
+          <Button
+            key={answerId}
+            style={{ marginTop: 16 }}
+            fullWidth
+            disableElevation
+            size="large"
+            disabled={voted}
+            variant="contained"
+            color="primary"
+            onClick={() => sendVote(answerId)}
+          >
+            {answers[answerId].player}
+          </Button>
+        ))}
+      </Grid>
+    </React.Fragment>
   );
 }

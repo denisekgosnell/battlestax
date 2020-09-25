@@ -5,8 +5,10 @@ import { selectPage, selectPlayer, selectId } from "../../store/gameSlice";
 import AddPlayers from "../../pages/Player/AddPlayers";
 import RoundInput from "../../pages/Player/RoundInput";
 import RoundVote from "../../pages/Player/RoundVote";
+import Final from "../../pages/Player/Final";
 import { useGamePollingInterval } from "../../util/hooks";
-import { Divider, Grid, Typography } from "@material-ui/core";
+import TitleBar from "../TitleBar";
+import { Grid } from "@material-ui/core";
 
 const getPage = (page) => {
   switch (page) {
@@ -18,6 +20,8 @@ const getPage = (page) => {
       return <RoundInput />;
     case constants.ROUND_VOTE_PAGE:
       return <RoundVote />;
+    case constants.FINAL_PAGE:
+      return <Final />;
     default:
       return <React.Fragment />;
   }
@@ -30,21 +34,12 @@ export default function PlayerLayout() {
   useGamePollingInterval();
 
   return (
-    <Grid
-      container
-      direction="column"
-      justify="center"
-      alignItems="center"
-      style={{ width: 320 }}
-    >
-      <Grid item style={{ height: 50, width: 320 }}>
-        <Typography>
-          {player}, {gameId}
-        </Typography>
-        <Divider />
-      </Grid>
-      <Grid item style={{ flexGrow: 1 }}>
-        {getPage(page)}
+    <Grid container justify="center">
+      <Grid container direction="column" style={{ maxWidth: 320 }}>
+        <TitleBar player={player} gameId={gameId} />
+        <Grid container style={{ flexGrow: 1 }} alignItems="center">
+          <Grid item>{getPage(page)}</Grid>
+        </Grid>
       </Grid>
     </Grid>
   );

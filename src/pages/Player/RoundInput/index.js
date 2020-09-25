@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import { Button, TextField, Grid, Typography } from "@material-ui/core";
+import { Button, TextField, Typography } from "@material-ui/core";
 import { selectQuestions } from "../../../store/questionsSlice";
 import { selectAnswers } from "../../../store/answersSlice";
 import { selectRound, selectPlayer, selectId } from "../../../store/gameSlice";
@@ -41,19 +41,20 @@ export default function RoundInput() {
   }, [response]);
 
   if (responseSent) {
-    return <Typography paragraph>hang tight!</Typography>;
+    return <React.Fragment />;
   }
 
   return (
-    <Grid container direction="column" justify="center" alignItems="center">
-      <Typography paragraph>{currentRound.title}</Typography>
+    <React.Fragment>
+      <Typography variant="h5" paragraph>
+        {currentRound.title}
+      </Typography>
       {_.keys(playerAnswers).map((answerId) => (
         <React.Fragment key={answerId}>
-          <Typography paragraph>
+          <Typography paragraph style={{ marginTop: 32 }}>
             {questions[answers[answerId].question].content}
           </Typography>
           <TextField
-            style={{ marginBottom: 16 }}
             label="response"
             variant="outlined"
             value={response[answerId].content || ""}
@@ -67,6 +68,7 @@ export default function RoundInput() {
         </React.Fragment>
       ))}
       <Button
+        style={{ marginTop: 32 }}
         fullWidth
         disableElevation
         size="large"
@@ -77,6 +79,6 @@ export default function RoundInput() {
       >
         submit
       </Button>
-    </Grid>
+    </React.Fragment>
   );
 }
