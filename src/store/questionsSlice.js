@@ -28,51 +28,33 @@ export const initializeQuestionsAndAnswers = () => {
     const { players } = getState();
     const playerNames = _.keys(players);
     constants.ROUNDS.forEach((round) => {
-      if (round.type === "comic") {
-        const content = _.sample(round.content);
-        const question = { id: generateShortId(), round: round.id, content };
+      const roundQuestions = _.sampleSize(
+        round.content,
+        playerNames.length
+      ).map((content) => {
+        const question = {
+          id: generateShortId(),
+          round: round.id,
+          content,
+        };
         dispatch(slice.actions.add(question));
-        playerNames.forEach((playerName) => {
+        return question;
+      });
+
+      const sortedPlayerNames = _.sampleSize(playerNames, playerNames.length);
+      roundQuestions.forEach((question, index) => {
+        const incrementedIndex = index + 1 < playerNames.length ? index + 1 : 0;
+        [index, incrementedIndex].forEach((playerIndex) => {
           dispatch(
             addAnswer({
               id: generateShortId(),
               question: question.id,
-              player: playerName,
+              player: sortedPlayerNames[playerIndex],
               content: null,
             })
           );
         });
-      }
-      if (round.type === "question") {
-        const roundQuestions = _.sampleSize(
-          round.content,
-          playerNames.length
-        ).map((content) => {
-          const question = {
-            id: generateShortId(),
-            round: round.id,
-            content,
-          };
-          dispatch(slice.actions.add(question));
-          return question;
-        });
-
-        const sortedPlayerNames = _.sampleSize(playerNames, playerNames.length);
-        roundQuestions.forEach((question, index) => {
-          const incrementedIndex =
-            index + 1 < playerNames.length ? index + 1 : 0;
-          [index, incrementedIndex].forEach((playerIndex) => {
-            dispatch(
-              addAnswer({
-                id: generateShortId(),
-                question: question.id,
-                player: sortedPlayerNames[playerIndex],
-                content: null,
-              })
-            );
-          });
-        });
-      }
+      });
     });
   };
 };

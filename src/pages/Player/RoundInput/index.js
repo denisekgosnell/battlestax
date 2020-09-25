@@ -49,18 +49,9 @@ export default function RoundInput() {
       <Typography paragraph>{currentRound.title}</Typography>
       {_.keys(playerAnswers).map((answerId) => (
         <React.Fragment key={answerId}>
-          {currentRound.type === "question" && (
-            <Typography paragraph>
-              {questions[answers[answerId].question].content}
-            </Typography>
-          )}
-          {currentRound.type === "comic" && (
-            <img
-              alt="comic"
-              style={{ maxWidth: "100%", marginBottom: 16 }}
-              src={questions[answers[answerId].question].content}
-            />
-          )}
+          <Typography paragraph>
+            {questions[answers[answerId].question].content}
+          </Typography>
           <TextField
             style={{ marginBottom: 16 }}
             label="response"

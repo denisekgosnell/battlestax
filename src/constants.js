@@ -29,7 +29,6 @@ export default {
   ROUNDS: [
     {
       id: 1,
-      type: "question",
       title: "Round One",
       scoreMultiplier: 1,
       content: [
@@ -45,7 +44,6 @@ export default {
     },
     {
       id: 2,
-      type: "question",
       title: "Final Round",
       scoreMultiplier: 2,
       content: [
@@ -59,21 +57,5 @@ export default {
         "The most annoying thing about Twitter.",
       ],
     },
-    // {
-    //   id: 3,
-    //   type: "comic",
-    //   title: "Final Round",
-    //   scoreMultiplier: 3,
-    //   content: [
-    //     "/comics/sleep.png",
-    //     "/comics/hygiene.png",
-    //     "/comics/happiness.png",
-    //     "/comics/year.png",
-    //     "/comics/age.png",
-    //     "/comics/education.png",
-    //     "/comics/elevator.png",
-    //     "/comics/party.png",
-    //   ],
-    // },
   ],
 };
