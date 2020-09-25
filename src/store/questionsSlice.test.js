@@ -17,6 +17,29 @@ describe("questions slice", () => {
     expect(result).toEqual(nextState);
   });
 
+  it("should reset the state", () => {
+    const nextState = initialState;
+    const result = reducer(null, slice.actions.reset());
+    expect(result).toEqual(nextState);
+  });
+
+  it("should set all questions", () => {
+    const questionId = generateShortId();
+    const questions = {
+      [questionId]: {
+        id: questionId,
+        round: 1,
+        content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      },
+    };
+    const nextState = reducer(initialState, slice.actions.setAll(questions));
+    const rootState = { questions: nextState };
+    expect(_.keys(selectQuestions(rootState)).length).toEqual(1);
+    expect(selectQuestions(rootState)[questionId].id).toEqual(
+      questions[questionId].id
+    );
+  });
+
   it("should add a question", () => {
     const question = {
       id: generateShortId(),

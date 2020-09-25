@@ -8,9 +8,22 @@ export default {
   SHORT_ID_DICTIONARY:
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
   SHORT_ID_LENGTH: 8,
+  LOCAL_STORAGE_KEY: "redux",
+
+  // timers
+  POLLING_INTERVAL: 3000,
+  TUTORIAL_LENGTH: 5000,
+  ROUND_INPUT_TIMER: 60000,
+  ROUND_VOTE_TIMER: 60000,
+  ROUND_SCORE_TIMER: 5000,
 
   // game states
-  ADDING_PLAYERS: "addingPlayers",
+  ADDING_PLAYERS_PAGE: "addingPlayers",
+  TUTORIAL_PAGE: "tutorial",
+  ROUND_INPUT_PAGE: "roundInput",
+  ROUND_VOTE_PAGE: "roundVote",
+  ROUND_SCORE_PAGE: "roundScore",
+  FINAL_PAGE: "final",
 
   // gameplay
   ROUNDS: [
@@ -33,7 +46,7 @@ export default {
     {
       id: 2,
       type: "question",
-      title: "Round Two",
+      title: "Final Round",
       scoreMultiplier: 2,
       content: [
         "The most expensive software ever imagined.",
@@ -46,21 +59,21 @@ export default {
         "The most annoying thing about Twitter.",
       ],
     },
-    {
-      id: 3,
-      type: "comic",
-      title: "Final Round",
-      scoreMultiplier: 3,
-      content: [
-        "/comics/sleep.png",
-        "/comics/hygiene.png",
-        "/comics/happiness.png",
-        "/comics/year.png",
-        "/comics/age.png",
-        "/comics/education.png",
-        "/comics/elevator.png",
-        "/comics/party.png",
-      ],
-    },
+    // {
+    //   id: 3,
+    //   type: "comic",
+    //   title: "Final Round",
+    //   scoreMultiplier: 3,
+    //   content: [
+    //     "/comics/sleep.png",
+    //     "/comics/hygiene.png",
+    //     "/comics/happiness.png",
+    //     "/comics/year.png",
+    //     "/comics/age.png",
+    //     "/comics/education.png",
+    //     "/comics/elevator.png",
+    //     "/comics/party.png",
+    //   ],
+    // },
   ],
 };

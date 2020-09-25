@@ -13,9 +13,14 @@ import {
 } from "@material-ui/core";
 
 export default function PlayerList({ players, audienceSize, showScore }) {
-  // append nulls to the player list
-  for (let i = players.length; i < constants.MAXIMUM_PLAYERS; i++) {
-    players.push(null);
+  let playerList = [];
+  if (showScore) {
+    playerList = _.orderBy(playerList, ["score"], ["desc"]);
+  }
+  const playerKeys = _.keys(players);
+  for (let i = 0; i < constants.MAXIMUM_PLAYERS; i++) {
+    const toPush = i < playerKeys.length ? players[playerKeys[i]] : null;
+    playerList.push(toPush);
   }
 
   return (
@@ -23,7 +28,7 @@ export default function PlayerList({ players, audienceSize, showScore }) {
       <Typography color="textSecondary">players</Typography>
       <Paper style={{ marginBottom: 16 }} square elevation={0}>
         <List>
-          {_.map(players, (player, index) => (
+          {_.map(playerList, (player, index) => (
             <React.Fragment key={index}>
               <ListItem>
                 <ListItemText
@@ -34,7 +39,7 @@ export default function PlayerList({ players, audienceSize, showScore }) {
                       <Typography color="textSecondary">...</Typography>
                     )
                   }
-                  secondary={showScore && player.score}
+                  secondary={showScore && player && player.score}
                 />
                 {player && player.vip && (
                   <ListItemSecondaryAction>

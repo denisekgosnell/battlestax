@@ -11,6 +11,9 @@ export const slice = createSlice({
     toggleInitialized: (state) => {
       state.initialized = !state.initialized;
     },
+    reset: () => {
+      return initialState;
+    },
   },
 });
 

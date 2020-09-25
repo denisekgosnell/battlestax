@@ -3,6 +3,7 @@ import constants from "../constants";
 import reducer, {
   initialState,
   initialize,
+  slice,
   incrementAudienceSize,
   setPlayer,
   selectId,
@@ -18,12 +19,18 @@ describe("game slice", () => {
     expect(result).toEqual(nextState);
   });
 
+  it("should reset the state", () => {
+    const nextState = initialState;
+    const result = reducer(null, slice.actions.reset());
+    expect(result).toEqual(nextState);
+  });
+
   it("should initialize a game", () => {
     const gameId = generateGameId();
     const nextState = reducer(initialState, initialize(gameId));
     const rootState = { game: nextState };
     expect(selectId(rootState)).toEqual(gameId);
-    expect(selectPage(rootState)).toEqual(constants.ADDING_PLAYERS);
+    expect(selectPage(rootState)).toEqual(constants.ADDING_PLAYERS_PAGE);
   });
 
   it("should add audience members", () => {

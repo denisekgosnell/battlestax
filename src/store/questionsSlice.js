@@ -11,8 +11,14 @@ export const slice = createSlice({
   name: "questions",
   initialState,
   reducers: {
+    setAll: (state, action) => {
+      return action.payload;
+    },
     add: (state, action) => {
       state[action.payload.id] = action.payload;
+    },
+    reset: () => {
+      return initialState;
     },
   },
 });

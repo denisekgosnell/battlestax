@@ -5,6 +5,7 @@ import gameReducer from "./gameSlice";
 import playersReducer from "./playersSlice";
 import questionsReducer from "./questionsSlice";
 import answersReducer from "./answersSlice";
+import votesReducer from "./votesSlice";
 
 export const reducers = combineReducers({
   app: appReducer,
@@ -12,6 +13,7 @@ export const reducers = combineReducers({
   players: playersReducer,
   questions: questionsReducer,
   answers: answersReducer,
+  votes: votesReducer,
 });
 
 export default configureStore({

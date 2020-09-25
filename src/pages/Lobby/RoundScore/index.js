@@ -1,0 +1,69 @@
+import React from "react";
+import { useSelector } from "react-redux";
+import { updateGame } from "../../../api";
+import { selectPlayers } from "../../../store/playersSlice";
+import { selectAnswers } from "../../../store/answersSlice";
+import { selectQuestions } from "../../../store/questionsSlice";
+import { selectVotes } from "../../../store/votesSlice";
+import PlayerList from "../../../components/PlayerList";
+import { Grid } from "@material-ui/core";
+import _ from "lodash";
+import constants from "../../../constants";
+import {
+  selectId,
+  selectRound,
+  selectAudienceSize,
+} from "../../../store/gameSlice";
+
+export default function RoundScore() {
+  const players = useSelector(selectPlayers);
+  const gameId = useSelector(selectId);
+  const roundId = useSelector(selectRound);
+  const currentRound = constants.ROUNDS.find((round) => round.id === roundId);
+  const audienceSize = useSelector(selectAudienceSize);
+  const answers = useSelector(selectAnswers);
+  const questions = useSelector(selectQuestions);
+  const votes = useSelector(selectVotes);
+  const roundQuestions = _.pickBy(
+    questions,
+    (question) => question.round === roundId
+  );
+  const roundAnswers = _.pickBy(answers, (answer) =>
+    _.keys(roundQuestions).includes(answer.question)
+  );
+  const roundVotes = _.pickBy(votes, (vote) =>
+    _.keys(roundAnswers).includes(vote.answer)
+  );
+
+  React.useEffect(() => {
+    const nextRound = currentRound.id + 1;
+    const newPlayers = _.cloneDeep(players);
+    _.keys(roundVotes).forEach((voteId) => {
+      const player = roundAnswers[roundVotes[voteId].answer].player;
+      newPlayers[player] = {
+        score:
+          constants.BASE_POINTS * currentRound.scoreMultiplier +
+          parseInt(newPlayers[player].score),
+      };
+    });
+    updateGame(`${gameId}/players`, newPlayers);
+    let next = { page: constants.FINAL_PAGE, round: "" };
+    if (nextRound <= constants.ROUNDS.length) {
+      next = { page: constants.ROUND_INPUT_PAGE, round: nextRound };
+    }
+    console.log(next);
+    setTimeout(() => {
+      updateGame(`${gameId}/game`, next);
+    }, constants.ROUND_SCORE_TIMER);
+  }, []);
+
+  return (
+    <Grid container direction="column" justify="center" alignItems="center">
+      <PlayerList
+        players={players}
+        audienceSize={audienceSize}
+        showScore={true}
+      />
+    </Grid>
+  );
+}

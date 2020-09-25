@@ -18,6 +18,12 @@ describe("players slice", () => {
     expect(result).toEqual(nextState);
   });
 
+  it("should reset the state", () => {
+    const nextState = initialState;
+    const result = reducer(null, slice.actions.reset());
+    expect(result).toEqual(nextState);
+  });
+
   it("should add a player via the reducer", () => {
     const player = { name: "CRW" };
     const nextState = reducer(initialState, slice.actions.add(player));

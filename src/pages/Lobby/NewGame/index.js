@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { generateGameId } from "../../../util/random";
 import { Button, Grid, Typography } from "@material-ui/core";
-import { initialize } from "../../../store/gameSlice";
+import { initialize, resetGame } from "../../../store/gameSlice";
 
 export default function NewGame() {
   const dispatch = useDispatch();
@@ -12,6 +12,7 @@ export default function NewGame() {
 
   const createAndInitGame = async () => {
     const newGameId = generateGameId();
+    dispatch(resetGame());
     dispatch(initialize(newGameId));
     await createGame(newGameId);
     history.push(`/lobby/${newGameId}`);

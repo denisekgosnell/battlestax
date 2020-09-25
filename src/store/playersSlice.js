@@ -13,29 +13,38 @@ export const slice = createSlice({
     add: (state, action) => {
       state[action.payload.name] = action.payload;
     },
-    incrementScore: (state, action) => {
+    updateScore: (state, action) => {
       if (state[action.payload.name]) {
-        state[action.payload.name].score += action.payload.score;
+        state[action.payload.name].score = action.payload.score;
       }
+    },
+    reset: () => {
+      return initialState;
     },
   },
 });
 
-export const addPlayer = (name) => {
+export const addPlayer = (name, score) => {
   return (dispatch, getState) => {
     const { players } = getState();
-    // don't allow for duplicate players
+    if (players[name] && score) {
+      dispatch(
+        slice.actions.updateScore({
+          name,
+          score,
+        })
+      );
+    }
     if (players[name]) {
       return;
     }
-    // don't allow more players than the maximum
     if (constants.MAXIMUM_PLAYERS <= _.keys(players).length) {
       return dispatch(incrementAudienceSize());
     }
     dispatch(
       slice.actions.add({
         name,
-        score: 0,
+        score: score ? score : 0,
         vip: _.keys(players).length === 0,
       })
     );

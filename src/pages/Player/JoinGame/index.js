@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import { addPlayer } from "../../../api";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { selectId, selectPlayer, setPlayer } from "../../../store/gameSlice";
+import {
+  selectId,
+  selectPlayer,
+  setPlayer,
+  setId,
+} from "../../../store/gameSlice";
 import { Button, TextField, Grid, Typography } from "@material-ui/core";
 
 export default function JoinGame() {
@@ -17,6 +22,7 @@ export default function JoinGame() {
     const newGameIdUpper = newGameId.toUpperCase();
     await addPlayer(newGameIdUpper, newPlayer);
     dispatch(setPlayer(newPlayer));
+    dispatch(setId(newGameIdUpper));
     history.push(`/player/${newGameIdUpper}`);
   };
 
