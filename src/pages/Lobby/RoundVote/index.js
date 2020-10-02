@@ -73,6 +73,7 @@ export default function RoundVote() {
         });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [votes]);
 
   return (
