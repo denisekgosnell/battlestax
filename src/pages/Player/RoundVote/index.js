@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import { Button, Grid, Typography } from "@material-ui/core";
 import { selectAnswers } from "../../../store/answersSlice";
+import { selectQuestions } from "../../../store/questionsSlice";
 import {
   selectPlayer,
   selectId,
@@ -14,15 +15,16 @@ export default function RoundVote() {
   const gameId = useSelector(selectId);
   const player = useSelector(selectPlayer);
   const currentQuestionId = useSelector(selectQuestion);
+  const questions = useSelector(selectQuestions);
   const answers = useSelector(selectAnswers);
   const questionAnswers = _.pickBy(
     answers,
     (answer) => answer.question === currentQuestionId
   );
-  const [voted, setVoted] = React.useState(false);
+  const [votedQuestions, setVotedQuestions] = React.useState([]);
 
   const sendVote = (answerId) => {
-    setVoted(true);
+    setVotedQuestions(votedQuestions.concat([currentQuestionId]));
     updateGame(`${gameId}/votes`, {
       [`${player}-${currentQuestionId}`]: {
         player,
@@ -32,7 +34,7 @@ export default function RoundVote() {
   };
 
   if (
-    voted ||
+    votedQuestions.includes(currentQuestionId) ||
     !_.isEmpty(_.pickBy(questionAnswers, (answer) => answer.player === player))
   ) {
     return <React.Fragment />;
@@ -41,7 +43,9 @@ export default function RoundVote() {
   return (
     <React.Fragment>
       <Grid item xs={12}>
-        <Typography paragraph>which one was the best?</Typography>
+        <Typography paragraph>
+          {questions[currentQuestionId].content}
+        </Typography>
       </Grid>
       <Grid item xs={12}>
         {_.keys(questionAnswers).map((answerId) => (
@@ -51,7 +55,7 @@ export default function RoundVote() {
             fullWidth
             disableElevation
             size="large"
-            disabled={voted}
+            disabled={votedQuestions.includes(currentQuestionId)}
             variant="contained"
             color="primary"
             onClick={() => sendVote(answerId)}
