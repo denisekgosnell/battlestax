@@ -2,17 +2,32 @@ import React from "react";
 import constants from "../../../constants";
 import { updateGame } from "../../../api";
 import { useSelector } from "react-redux";
-import { Divider, Grid, Typography } from "@material-ui/core";
+import { selectAnswers } from "../../../store/answersSlice";
+import { selectQuestions } from "../../../store/questionsSlice";
+import { selectVotes } from "../../../store/votesSlice";
+import { selectPlayers } from "../../../store/playersSlice";
+import { useTheme } from "@material-ui/core/styles";
+import _ from "lodash";
 import {
   selectId,
   selectRound,
   selectQuestion,
 } from "../../../store/gameSlice";
-import { selectAnswers } from "../../../store/answersSlice";
-import { selectQuestions } from "../../../store/questionsSlice";
-import { selectVotes } from "../../../store/votesSlice";
-import { selectPlayers } from "../../../store/playersSlice";
-import _ from "lodash";
+import {
+  Divider,
+  Grid,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+  Avatar,
+} from "@material-ui/core";
+
+const countVotes = (votes, answerId) => {
+  const answerVotes = _.pickBy(votes, (vote) => vote.answer === answerId);
+  return _.isEmpty(answerVotes) ? 0 : _.keys(answerVotes).length;
+};
 
 export default function RoundVote() {
   const gameId = useSelector(selectId);
@@ -24,6 +39,7 @@ export default function RoundVote() {
   const questions = useSelector(selectQuestions);
   const votes = useSelector(selectVotes);
   const [votedQuestions, setVotedQuestions] = React.useState([]);
+  const theme = useTheme();
 
   React.useEffect(() => {
     const roundQuestions = _.pickBy(
@@ -77,16 +93,32 @@ export default function RoundVote() {
           {questions[currentQuestionId].content}
         </Typography>
       </Grid>
-      {_.keys(
-        _.pickBy(answers, (answer) => answer.question === currentQuestionId)
-      ).map((answerId) => (
-        <Grid item xs={12} key={answerId}>
-          <Typography variant="h5" paragraph>
-            {answers[answerId].player}'s answer: {answers[answerId].content}
-          </Typography>
-          <Divider />
-        </Grid>
-      ))}
+      <Grid item xs={12}>
+        <List>
+          {_.keys(
+            _.pickBy(answers, (answer) => answer.question === currentQuestionId)
+          ).map((answerId) => (
+            <ListItem key={answerId}>
+              <ListItemAvatar>
+                <Avatar
+                  variant="square"
+                  style={{ backgroundColor: theme.palette.primary.main }}
+                >
+                  {countVotes(votes, answerId)}
+                </Avatar>
+              </ListItemAvatar>
+              <ListItemText
+                primary={
+                  <Typography variant="h5">
+                    {answers[answerId].content}
+                  </Typography>
+                }
+              />
+              <Divider />
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
     </Grid>
   );
 }
