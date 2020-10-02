@@ -41,7 +41,7 @@ export default function RoundVote() {
   return (
     <React.Fragment>
       <Grid item xs={12}>
-        <Typography paragraph>who did it better?</Typography>
+        <Typography paragraph>which one was the best?</Typography>
       </Grid>
       <Grid item xs={12}>
         {_.keys(questionAnswers).map((answerId) => (
@@ -56,7 +56,7 @@ export default function RoundVote() {
             color="primary"
             onClick={() => sendVote(answerId)}
           >
-            {answers[answerId].player}
+            {answers[answerId].content}
           </Button>
         ))}
       </Grid>
